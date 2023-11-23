@@ -8,7 +8,8 @@ export const AppRouter = () => {
       <Route path="*" element={<div>404</div>} />
       <Route path={ROUTE.login} element={<Page.Login />} />
       <Route path={ROUTE.home} element={<Page.Home />} />
-      <Route path={ROUTE.trip} element={<Page.Trip />} >
+      <Route path={ROUTE.createUser} element={<Page.CreateUser />} />
+      <Route path={ROUTE.trip} element={<Page.Trip />}>
         <Route path=":id" />
       </Route>
     </Routes>

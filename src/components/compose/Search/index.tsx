@@ -6,20 +6,13 @@ import * as z from "zod";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { toast } from "@/components/ui/use-toast";
+
 import { DateRange } from "react-day-picker";
 import format from "date-fns/format";
 import { ptBR } from "date-fns/locale";
@@ -27,57 +20,76 @@ import { Input } from "@/components/ui/input";
 import { AppStrings } from "@/strings/app.strings";
 import { useState } from "react";
 
+interface TSearchProps {
+  onSubmitForm: (search: string, startDate: Date, endDate: Date) => void;
+}
+
 type TFormData = {
+  search: string;
   dates: DateRange;
 };
 
 const FormSchema = z.object({
-  dates: z.object({
-    from: z.date({
-      required_error: "Please select a start date",
-    }),
-    to: z.date({
-      required_error: "Please select a end date",
-    }),
+  search: z.string().min(1, {
+    message: AppStrings.requiredSearchError,
   }),
+  dates: z.object(
+    {
+      from: z.date({
+        description: "Start date",
+        required_error: AppStrings.requiredDateError,
+      }),
+      to: z.date({
+        description: "End date",
+        required_error: AppStrings.requiredDateError,
+      }),
+    },
+    {
+      required_error: AppStrings.requiredDateError,
+    }
+  ),
 });
 
-const Search = () => {
-  const [textDate, setTextDate] = useState<String>(AppStrings.selectDate);
+const Search = ({ onSubmitForm }: TSearchProps) => {
+  const [textDate, setTextDate] = useState<string>(AppStrings.selectDate);
 
   const form = useForm<TFormData>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: TFormData) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    onSubmitForm(
+      data.search,
+      new Date(data?.dates.from || ""),
+      new Date(data?.dates.to || "")
+    );
   }
 
   return (
     <Form {...form}>
       <form
-        className="flex items-baseline justify-start w-full gap-2 flex-col"
+        className="flex items-baseline justify-start w-full gap-2 flex-col py-5"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="w-full flex gap-2 items-center justify-start max-w-xl">
+        <div className="w-full flex gap-2 items-center justify-start">
+          <FormField
+            control={form.control}
+            name="search"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <Input
+                  onChange={(e) => field.onChange(e.target.value)}
+                  className="w-full"
+                  placeholder={AppStrings.searchDestinationPlaceholder}
+                />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="dates"
             render={({ field }) => (
-              <div className="flex items-center justify-start gap-2 w-full">
-                <FormItem className="w-full">
-                  <Input
-                    className="max-w-md"
-                    placeholder={AppStrings.searchDestinationPlaceholder}
-                  />
-                </FormItem>
+              <div className="flex items-center justify-start gap-2">
                 <FormItem className="flex flex-col">
                   <Popover>
                     <PopoverTrigger asChild>
@@ -85,11 +97,11 @@ const Search = () => {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-[70px]",
-                            !field.value && "text-muted-foreground"
+                            "w-[70px] text-muted-foreground",
+                            field.value && "text-primary"
                           )}
                         >
-                          <CalendarIcon className="mx-2 h-4 w-4 opacity-50" />
+                          <CalendarIcon className="mx-2 h-4 w-4" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -98,33 +110,58 @@ const Search = () => {
                         mode="range"
                         selected={field.value}
                         onSelect={(e) => {
-                          field.onChange(e)
-                          const selectedDate = e?.from || e?.to ? (
-                            `${e.from
-                              ? format(e.from, "eee d 'de' MMM", {
-                                locale: ptBR,
-                              })
-                              : ""
-                            } - ${e.to
-                              ? format(e.to, "eee d 'de' MMM", {
-                                locale: ptBR,
-                              })
-                              : ""
-                            }`
-                          ) : (
-                            `${AppStrings.initDate} - ${AppStrings.endDate}`
-                          );
+                          const clonedDates = { ...e };
+                          field.onChange(clonedDates);
+                          const selectedDate =
+                            e?.from || e?.to
+                              ? `${
+                                  e.from
+                                    ? format(e.from, "eee d 'de' MMM", {
+                                        locale: ptBR,
+                                      })
+                                    : ""
+                                } - ${
+                                  e.to
+                                    ? format(e.to, "eee d 'de' MMM", {
+                                        locale: ptBR,
+                                      })
+                                    : ""
+                                }`
+                              : `${AppStrings.initDate} - ${AppStrings.endDate}`;
                           setTextDate(selectedDate);
                         }}
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
                 </FormItem>
               </div>
             )}
           />
-          <Button type="submit"><SearchIcon className="mx-2 h-4 w-4 opacity-50" /></Button>
+          <Button type="submit">
+            <SearchIcon className="mx-2 h-4 w-4 opacity-50" />
+          </Button>
+        </div>
+        <div className="flex flex-col items-start justify-start">
+          {form.formState.errors.dates?.from?.message && (
+            <p className="text-red-500 text-sm">
+              {form.formState.errors.dates.from.message}
+            </p>
+          )}
+          {form.formState.errors.dates?.to?.message && (
+            <p className="text-red-500 text-sm">
+              {form.formState.errors.dates.to.message}
+            </p>
+          )}
+          {form.formState.errors?.search?.message && (
+            <p className="text-red-500 text-sm">
+              {form.formState.errors.search.message}
+            </p>
+          )}
+          {form.formState.errors.dates?.message && (
+            <p className="text-red-500 text-sm">
+              {form.formState.errors.dates.message}
+            </p>
+          )}
         </div>
         <p className="text-muted-foreground text-sm">{textDate}</p>
       </form>
