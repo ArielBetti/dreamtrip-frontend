@@ -11,7 +11,7 @@ export const FormCreateUserSchema = {
     }),
   }),
   [Steps.Birthday]: z.object({
-    birthdayMonth: z.number({
+    birthdayMonth: z.string({
       invalid_type_error: "Mês inválido",
       required_error: "Mês é obrigatória",
     }),

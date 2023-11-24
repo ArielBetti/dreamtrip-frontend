@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Steps } from "./steps.enum";
-import { Control, useForm } from "react-hook-form";
+import { Control, UseFormWatch, useForm } from "react-hook-form";
 import { ICreateUserRequestFormDTO } from "@/interfaces/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormCreateUserSchema } from "./validation";
@@ -20,6 +20,7 @@ interface ICreateUserMultiStepFormProps {
 export interface ICreateUserStepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<ICreateUserRequestFormDTO, any>;
+  watch?: UseFormWatch<ICreateUserRequestFormDTO>;
 }
 
 const CreateUserMultiStepForm = ({
@@ -32,10 +33,18 @@ const CreateUserMultiStepForm = ({
   const form = useForm<ICreateUserRequestFormDTO>({
     resolver: zodResolver(FormCreateUserSchema[step]),
     mode: "all",
+    defaultValues: {
+      email: "",
+      password: "",
+      interests: [],
+      image: undefined,
+      nickName: "",
+    },
   });
 
   const {
     handleSubmit,
+    watch,
     control,
     formState: { isValid },
   } = form;
@@ -108,7 +117,7 @@ const CreateUserMultiStepForm = ({
             <StepName control={control} />
           </Step>
           <Step currentStep={step} step={Steps.Birthday}>
-            <div>Data de nascimento</div>
+            <StepBirthday watch={watch} control={control} />
           </Step>
           <Step currentStep={step} step={Steps.Credentials}>
             <div>Credenciais</div>
@@ -146,6 +155,7 @@ const CreateUserMultiStepForm = ({
             {buttonText}
           </Button>
         )}
+        <pre>{JSON.stringify(watch(), null, 2)}</pre>
       </form>
     </Form>
   );

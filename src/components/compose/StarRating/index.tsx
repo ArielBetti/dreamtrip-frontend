@@ -16,7 +16,7 @@ const StarRating = ({ rating }: TStartRating) => {
 
         return lastIsFractional ? (
           <StarHalfIcon
-            key={`start-icon-${index}-${new Date().getTime()}`}
+            key={`start-icon-${index}`}
             className="w-5 h-5 fill-primary text-primary"
           />
         ) : (

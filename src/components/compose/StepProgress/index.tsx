@@ -19,9 +19,9 @@ const StepProgress = ({
 
         return (
           <div
-            key={`step-progress-${index}-${new Date().getTime()}`}
+            key={`step-progress-${index}`}
             className={cn(
-              "w-full h-1 bg-muted rounded-md transition-all border border-transparent duration-500",
+              "w-full h-1 bg-muted rounded-md transition-colors border border-transparent duration-500",
               completeAll && "bg-primary",
               isCurrent && "border border-primary",
               isPainted && !isCurrent && "bg-primary"
