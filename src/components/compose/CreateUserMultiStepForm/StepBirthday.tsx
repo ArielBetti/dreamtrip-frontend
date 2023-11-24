@@ -24,7 +24,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 
 const StepBirthday = ({ control, watch }: ICreateUserStepProps) => {
-  const watchValues = watch ? watch() : null;
+  const maxYears = 122;
+  const enableYears = Array.from(Array(maxYears)).map(
+    (_, index) => new Date().getFullYear() - index
+  );
+  const watchValues = watch;
   const day = watchValues?.birthdayDay || 2;
   const month = watchValues?.birthdayMonth || "5";
   const year = watchValues?.birthdayYear || 1999;
@@ -127,12 +131,11 @@ const StepBirthday = ({ control, watch }: ICreateUserStepProps) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {Array.from({ length: 122 }, (_, index) => {
-                    const year = new Date().getFullYear() - index;
-                    return (
-                      <SelectItem value={year.toString()}>{year}</SelectItem>
-                    );
-                  })}
+                  {enableYears.map((yearOption, index) => (
+                    <SelectItem key={index} value={yearOption.toString()}>
+                      {yearOption}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />
