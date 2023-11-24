@@ -1,8 +1,7 @@
-import { StarHalfIcon, StarIcon } from 'lucide-react';
-import React from 'react'
+import { StarHalfIcon, StarIcon } from "lucide-react";
 
 interface TStartRating {
-  rating: number
+  rating: number;
 }
 
 const StarRating = ({ rating }: TStartRating) => {
@@ -11,17 +10,21 @@ const StarRating = ({ rating }: TStartRating) => {
   const isFractional = !Number.isInteger(currentRating);
 
   return (
-    <div className='flex items-start justify-center'>
+    <div className="flex items-start justify-center">
       {Array.from(Array(Math.floor(currentRating))).map((_, index, array) => {
         const lastIsFractional = index === array.length - 1 && isFractional;
 
-        return lastIsFractional ?
-          <StarHalfIcon className='w-5 h-5 fill-primary text-primary' />
-          : <StarIcon className='w-5 h-5 fill-primary text-primary' />
-      }
-      )}
+        return lastIsFractional ? (
+          <StarHalfIcon
+            key={`start-icon-${index}-${new Date().getTime()}`}
+            className="w-5 h-5 fill-primary text-primary"
+          />
+        ) : (
+          <StarIcon className="w-5 h-5 fill-primary text-primary" />
+        );
+      })}
     </div>
-  )
-}
+  );
+};
 
-export default StarRating
+export default StarRating;

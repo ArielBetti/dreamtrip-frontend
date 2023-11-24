@@ -12,8 +12,7 @@ const HeaderGeneric = () => {
   const { user } = useAuthStore();
 
   const handleGoBack = () => {
-    const { history } = window;
-    const verifyHistory = history.length > 1;
+    const verifyHistory = navigate.length > 1;
     verifyHistory ? navigate(-1) : navigate(ROUTE.home);
   };
 

@@ -92,6 +92,16 @@ module.exports = {
             opacity: 1,
           },
         },
+				leaveDown: {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+            opacity: 1,
+          },
+          "100%": {
+            transform: "translateY(20px)",
+            opacity: 0,
+          },
+        },
         upSlide: {
           "0%, 100%": {
             transform: "translateY(20px)",
@@ -136,6 +146,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
         blurIn: "blurIn 0.45s ease-in-out forwards",
         fadeIn: "fadeIn 0.4s  ease forwards",
+        leaveDown: "leaveDown 0.25s  ease forwards",
         downSlide: "downSlide 0.25s  ease forwards",
         slowDownSlide: "downSlide 0.5s  ease forwards",
         leftSlide: "leftSlide 0.25s  ease forwards",

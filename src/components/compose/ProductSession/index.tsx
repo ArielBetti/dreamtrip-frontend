@@ -60,6 +60,7 @@ const ProductSession = ({
       <div className="flex flex-wrap gap-2 md:flex-row flex-col w-full">
         {travels.map((item) => (
           <ProductCard
+            key={item._id}
             id={item._id}
             onClick={() => navigate(`${ROUTE.trip}/${item._id}`)}
             price={item.price}
