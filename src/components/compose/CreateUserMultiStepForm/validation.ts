@@ -24,7 +24,22 @@ export const FormCreateUserSchema = {
       required_error: "Dia é obrigatório",
     }),
   }),
-  [Steps.Credentials]: z.object({}),
+  [Steps.Credentials]: z.object({
+    nickName: z.string().min(3, {
+      message: "Apelido é obrigatório",
+    }),
+    email: z
+      .string()
+      .min(5, {
+        message: "Email é obrigatório",
+      })
+      .email({
+        message: "Email inválido",
+      }),
+    password: z.string().min(6, {
+      message: "Digite uma senha com no mínimo 6 caracteres",
+    }),
+  }),
   [Steps.Interests]: z.object({}),
   [Steps.ProfilePicture]: z.object({}),
   [Steps.Confirmation]: z.object({}),

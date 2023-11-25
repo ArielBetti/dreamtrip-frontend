@@ -13,15 +13,13 @@ import HeaderGeneric from "./components/compose/HeaderGeneric";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="dreamtrip-ui-theme">
-        <BrowserRouter>
-          <HeaderGeneric />
-          <AppRouter />
-          <Toaster />
-        </BrowserRouter>
-      </ThemeProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider defaultTheme="dark" storageKey="dreamtrip-ui-theme">
+      <BrowserRouter>
+        <HeaderGeneric />
+        <AppRouter />
+        <Toaster />
+      </BrowserRouter>
+    </ThemeProvider>
+  </QueryClientProvider>
 );

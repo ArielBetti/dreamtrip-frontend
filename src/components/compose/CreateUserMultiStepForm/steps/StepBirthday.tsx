@@ -5,7 +5,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ICreateUserStepProps } from ".";
+import { ICreateUserStepProps } from "..";
 import { ptBR } from "date-fns/locale";
 import {
   Select,
@@ -34,7 +34,7 @@ const StepBirthday = ({ control, watch }: ICreateUserStepProps) => {
   const year = watchValues?.birthdayYear || 1999;
 
   return (
-    <div className="flex flex-col w-full items-start justify-start gap-4">
+    <div className="flex flex-col w-full items-start justify-start gap-5">
       <h1 className="font-semibold">Data de nascimento</h1>
       <div className="flex items-baseline justify-start gap-2 w-full">
         <FormField

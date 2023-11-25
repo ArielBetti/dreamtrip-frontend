@@ -6,7 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ICreateUserStepProps } from ".";
+import { ICreateUserStepProps } from "..";
 
 const StepName = ({ control }: ICreateUserStepProps) => {
   return (

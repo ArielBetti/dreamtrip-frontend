@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Steps } from "./steps.enum";
-import { Control, useForm } from "react-hook-form";
+import { Control, UseFormTrigger, useForm } from "react-hook-form";
 import { ICreateUserRequestFormDTO } from "@/interfaces/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormCreateUserSchema } from "./validation";
@@ -8,10 +8,11 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { PencilIcon } from "lucide-react";
 import Step from "../Step";
-import StepName from "./StepName";
+import StepName from "./steps/StepName";
 import StepProgress from "../StepProgress";
-import StepBirthday from "./StepBirthday";
+import StepBirthday from "./steps/StepBirthday";
 import { cn } from "@/lib/utils";
+import StepCredentials from "./steps/StepCredentials";
 
 interface ICreateUserMultiStepFormProps {
   onSubmit: () => void;
@@ -21,6 +22,7 @@ export interface ICreateUserStepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<ICreateUserRequestFormDTO, any>;
   watch?: ICreateUserRequestFormDTO;
+  trigger?: UseFormTrigger<ICreateUserRequestFormDTO>;
 }
 
 const CreateUserMultiStepForm = ({
@@ -47,24 +49,33 @@ const CreateUserMultiStepForm = ({
     watch,
     control,
     formState: { isValid },
+    trigger,
   } = form;
 
   const watchInstance = watch();
   const disablePreviusButton = step === Steps.Name || complete;
 
+  const verifyFields = async () => {
+    await trigger();
+  };
+
+  const handlePreviousStep = async () => {
+    if (!disablePreviusButton) {
+      setStep((current) => current - 1);
+    }
+    setTimeout(() => {
+      verifyFields();
+    }, 100);
+  };
+
   const handleSubmitForm = () => {
-    console.log("bateu");
     setComplete(true);
     onSubmit();
   };
 
-  const handlePreviousStep = () => {
-    if (!disablePreviusButton) {
-      setStep((current) => current - 1);
-    }
-  };
-
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
+    const isStepValid = await trigger();
+    if (!isStepValid) return;
     if (step === Steps.Confirmation) return;
     setStep((current) => current + 1);
   };
@@ -88,7 +99,7 @@ const CreateUserMultiStepForm = ({
     <Form {...form}>
       <form
         className="flex flex-col gap-5 w-full transition-all"
-        onSubmit={form.handleSubmit(handleSubmitForm)}
+        onSubmit={handleSubmit(handleSubmitForm)}
       >
         <div className="animate-fadeIn">
           <div className="w-full py-5">
@@ -118,10 +129,14 @@ const CreateUserMultiStepForm = ({
             <StepName control={control} />
           </Step>
           <Step currentStep={step} step={Steps.Birthday}>
-            <StepBirthday watch={watchInstance} control={control} />
+            <StepBirthday
+              trigger={trigger}
+              watch={watchInstance}
+              control={control}
+            />
           </Step>
           <Step currentStep={step} step={Steps.Credentials}>
-            <div>Credenciais</div>
+            <StepCredentials control={control} />
           </Step>
           <Step currentStep={step} step={Steps.Interests}>
             <div>Interesses</div>
