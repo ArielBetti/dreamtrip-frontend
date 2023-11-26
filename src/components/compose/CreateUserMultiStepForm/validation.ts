@@ -1,6 +1,12 @@
 import { z } from "zod";
 import { Steps } from "./steps.enum";
-
+export const MAX_FILE_SIZE = 600000;
+export const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 export const FormCreateUserSchema = {
   [Steps.Name]: z.object({
     firstName: z.string().min(3, {
@@ -40,7 +46,11 @@ export const FormCreateUserSchema = {
       message: "Digite uma senha com no mínimo 6 caracteres",
     }),
   }),
-  [Steps.Interests]: z.object({}),
-  [Steps.ProfilePicture]: z.object({}),
+  [Steps.Interests]: z.object({
+    interests: z.optional(z.array(z.string())),
+  }),
+  [Steps.ProfilePicture]: z.object({
+    image: z.string().optional(),
+  }),
   [Steps.Confirmation]: z.object({}),
 };

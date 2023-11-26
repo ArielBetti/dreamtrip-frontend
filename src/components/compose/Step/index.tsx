@@ -14,7 +14,7 @@ const Step = ({ className, children, currentStep, step }: IStepProps) => {
       {step >= currentStep && (
         <div
           className={cn(
-            "p-0 m-0 animate-fadeIn duration-700 w-full",
+            "p-0 m-0 animate-fadeIn duration-500 w-full",
             currentStep !== step ? "hidden" : "block",
             className && className
           )}

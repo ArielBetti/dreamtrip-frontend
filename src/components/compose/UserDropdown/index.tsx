@@ -22,25 +22,31 @@ import { Avatar } from "@/components/ui/avatar";
 import ThemeToggleItem from "../ThemeToggle/ThemeToggleItem";
 import { useNavigate } from "react-router-dom";
 import { ROUTE } from "@/routes/routes";
+import { TUser } from "@/interfaces/user";
+import UserAvatar from "../UserAvatar";
 
 interface IUserDropdownProps {
-  hasUser?: boolean;
+  user?: TUser | null;
 }
 
-const UserDropdown = ({ hasUser = false }: IUserDropdownProps) => {
+const UserDropdown = ({ user }: IUserDropdownProps) => {
   const navigate = useNavigate();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="flex items-center justify-center bg-muted">
-          <UserIcon className="h-5 w-5" />
+          {user ? (
+            <UserAvatar userName={user.nickName} userImage={user.image || ""} />
+          ) : (
+            <UserIcon className="h-5 w-5" />
+          )}
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Área do usuário</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {hasUser && (
+        {user && (
           <>
             <DropdownMenuGroup>
               <DropdownMenuItem>
@@ -61,7 +67,7 @@ const UserDropdown = ({ hasUser = false }: IUserDropdownProps) => {
           </>
         )}
         <DropdownMenuGroup>
-          {!hasUser && (
+          {!user && (
             <>
               <DropdownMenuItem className="relative">
                 <LogIn className="mr-2 h-4 w-4" />
@@ -77,7 +83,7 @@ const UserDropdown = ({ hasUser = false }: IUserDropdownProps) => {
             </>
           )}
           <ThemeToggleItem />
-          {hasUser && (
+          {user && (
             <DropdownMenuItem className="relative">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Desconectar</span>

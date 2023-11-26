@@ -31,7 +31,7 @@ const HeaderGeneric = () => {
         ) : (
           <h1 className="font-semibold animate-slowDownSlide">{title}</h1>
         )}
-        <UserDropdown hasUser={!!user} />
+        <UserDropdown user={user} />
       </div>
     </div>
   );

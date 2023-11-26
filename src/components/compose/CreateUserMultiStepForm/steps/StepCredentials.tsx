@@ -10,7 +10,7 @@ import { ICreateUserStepProps } from "..";
 import { Input } from "@/components/ui/input";
 
 const StepCredentials = ({ control }: ICreateUserStepProps) => {
-  control.register("nickName", {});
+  control?.register("nickName", {});
   return (
     <div className="flex flex-col justify-start items-start w-full gap-4">
       <FormField

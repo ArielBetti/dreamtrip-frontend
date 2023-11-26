@@ -13,14 +13,17 @@ import StepProgress from "../StepProgress";
 import StepBirthday from "./steps/StepBirthday";
 import { cn } from "@/lib/utils";
 import StepCredentials from "./steps/StepCredentials";
+import StepInterests from "./steps/StepInterests";
+import StepImage from "./steps/StepImage";
+import StepConfirmation from "./steps/StepConfirmation";
 
 interface ICreateUserMultiStepFormProps {
-  onSubmit: () => void;
+  onSubmit: (data: ICreateUserRequestFormDTO) => void;
 }
 
 export interface ICreateUserStepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<ICreateUserRequestFormDTO, any>;
+  control?: Control<ICreateUserRequestFormDTO, any>;
   watch?: ICreateUserRequestFormDTO;
   trigger?: UseFormTrigger<ICreateUserRequestFormDTO>;
 }
@@ -63,14 +66,19 @@ const CreateUserMultiStepForm = ({
     if (!disablePreviusButton) {
       setStep((current) => current - 1);
     }
-    setTimeout(() => {
+    const handler = setTimeout(() => {
       verifyFields();
     }, 100);
+
+    return () => {
+      clearTimeout(handler);
+    };
   };
 
   const handleSubmitForm = () => {
-    setComplete(true);
-    onSubmit();
+    onSubmit({
+      ...watchInstance,
+    });
   };
 
   const handleNextStep = async () => {
@@ -85,15 +93,12 @@ const CreateUserMultiStepForm = ({
       return "Criar conta";
     }
 
-    if (
-      step === Steps.ProfilePicture &&
-      form.getValues("image") === undefined
-    ) {
+    if (step === Steps.ProfilePicture && !watchInstance.image) {
       return "Continuar sem foto";
     }
 
     return "Próximo";
-  }, [form, step]);
+  }, [step, watchInstance]);
 
   return (
     <Form {...form}>
@@ -139,13 +144,13 @@ const CreateUserMultiStepForm = ({
             <StepCredentials control={control} />
           </Step>
           <Step currentStep={step} step={Steps.Interests}>
-            <div>Interesses</div>
+            <StepInterests control={control} />
           </Step>
           <Step currentStep={step} step={Steps.ProfilePicture}>
-            <div>Foto de perfil</div>
+            <StepImage watch={watchInstance} control={control} />
           </Step>
           <Step currentStep={step} step={Steps.Confirmation}>
-            <div>Confirmação</div>
+            <StepConfirmation completed={complete} watch={watchInstance} />
           </Step>
         </div>
         {step === Steps.Confirmation ? (
@@ -163,7 +168,7 @@ const CreateUserMultiStepForm = ({
         ) : (
           <Button
             key="next-step-create-user"
-            className="md:mt-5 fixed md:relative max-md:bottom-0 max-md:left-0 max-md:rounded-none w-full"
+            className="z-40 md:mt-5 fixed md:relative max-md:bottom-0 max-md:left-0 max-md:rounded-none w-full"
             disabled={!isValid}
             onClick={handleNextStep}
             type="button"
@@ -171,7 +176,6 @@ const CreateUserMultiStepForm = ({
             {buttonText}
           </Button>
         )}
-        <pre>{JSON.stringify(watch(), null, 2)}</pre>
       </form>
     </Form>
   );

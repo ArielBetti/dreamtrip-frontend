@@ -15,7 +15,7 @@ export type ICreateUserRequestDTO = {
   firstName: string;
   lastName: string;
   nickName: string;
-  image?: Buffer;
+  image?: string;
   password: string;
   interests?: string[];
 };
@@ -28,7 +28,7 @@ export type ICreateUserRequestFormDTO = {
   firstName: string;
   lastName: string;
   nickName: string;
-  image?: Buffer;
+  image?: string;
   password: string;
   interests?: string[];
 };

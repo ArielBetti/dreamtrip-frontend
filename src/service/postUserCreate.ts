@@ -7,9 +7,7 @@ export const postUserCreate = async (
 ): Promise<ICreateUserReturnDTO> => {
   const { data } = await requester({}).post<ICreateUserReturnDTO>(
     `${ENDPOINTS.createUser}`,
-    {
-      FormData: body,
-    }
+    body
   );
 
   return data;
