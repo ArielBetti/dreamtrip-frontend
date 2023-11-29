@@ -24,7 +24,7 @@ const Reserve = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [queryParams] = useSearchParams();
-  const { data, isLoading, isError, error } = useGetSingleTravel(id || "1");
+  const { data, isLoading, isError } = useGetSingleTravel(id || "1");
   const startDate = queryParams.get("startDate");
   const endDate = queryParams.get("endDate");
   const travelers = queryParams.get("travelers");
@@ -134,7 +134,7 @@ const Reserve = () => {
               <Button
                 onClick={() => navigate(ROUTE.home)}
                 variant="outline"
-								type="button"
+                type="button"
                 className="my-5"
               >
                 Voltar para página inicial

@@ -1,4 +1,3 @@
-import React from "react";
 import { IReserveStepProps } from "..";
 import StarRating from "../../StarRating";
 import { Card } from "@/components/ui/card";

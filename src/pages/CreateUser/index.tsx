@@ -19,12 +19,8 @@ const CreateUser = () => {
   const [welcomeDialog, setWelcomeDialog] = useState(false);
   const navigate = useNavigate();
 
-  const {
-    mutate: createUser,
-    isLoading: isLoadingCreateUser,
-    error: createUserError,
-    isError: isErrorCreateUser,
-  } = useMutateCreateUser();
+  const { mutate: createUser, isLoading: isLoadingCreateUser } =
+    useMutateCreateUser();
 
   function onSubmit(data: ICreateUserRequestFormDTO) {
     const birthday = new Date(
