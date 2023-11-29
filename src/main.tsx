@@ -10,18 +10,21 @@ import "react-credit-cards-2/dist/es/styles-compiled.css";
 import { ThemeProvider } from "./components/theme-provider";
 import HeaderGeneric from "./components/compose/HeaderGeneric";
 import Navigation from "./components/compose/Navigation";
+import { StrictMode } from "react";
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="dark" storageKey="dreamtrip-ui-theme">
-      <BrowserRouter>
-        <HeaderGeneric />
-        <AppRouter />
-        <Navigation />
-        <Toaster />
-      </BrowserRouter>
-    </ThemeProvider>
-  </QueryClientProvider>
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="dark" storageKey="dreamtrip-ui-theme">
+        <BrowserRouter>
+          <HeaderGeneric />
+          <AppRouter />
+          <Navigation />
+          <Toaster />
+        </BrowserRouter>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </StrictMode>
 );
