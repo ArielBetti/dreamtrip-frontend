@@ -33,6 +33,25 @@ export type ICreateUserRequestFormDTO = {
   interests?: string[];
 };
 
+export type IUserLoginRequestDTO = {
+  email: string;
+  password: string;
+};
+
+export type IUserLoginResponseDTO = {
+  id: string;
+  email: string;
+  birthday: Date;
+  firstName: string;
+  lastName: string;
+  nickName: string;
+  image?: string;
+  imageVersion?: string;
+  status: string;
+  token: string;
+  interests?: string[];
+};
+
 export type ICreateUserReturnDTO = {
   email: string;
   birthday: Date;

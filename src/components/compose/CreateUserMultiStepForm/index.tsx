@@ -19,6 +19,7 @@ import StepConfirmation from "./steps/StepConfirmation";
 
 interface ICreateUserMultiStepFormProps {
   onSubmit: (data: ICreateUserRequestFormDTO) => void;
+  complete: boolean;
 }
 
 export interface ICreateUserStepProps {
@@ -30,9 +31,9 @@ export interface ICreateUserStepProps {
 
 const CreateUserMultiStepForm = ({
   onSubmit,
+  complete,
 }: ICreateUserMultiStepFormProps) => {
   const maxSteps = 6;
-  const [complete, setComplete] = useState(false);
   const [step, setStep] = useState(Steps.Name);
 
   const form = useForm<ICreateUserRequestFormDTO>({
@@ -168,7 +169,7 @@ const CreateUserMultiStepForm = ({
         ) : (
           <Button
             key="next-step-create-user"
-            className="z-40 md:mt-5 fixed md:relative max-md:bottom-0 max-md:left-0 max-md:rounded-none w-full"
+            className="mt-5 w-full"
             disabled={!isValid}
             onClick={handleNextStep}
             type="button"

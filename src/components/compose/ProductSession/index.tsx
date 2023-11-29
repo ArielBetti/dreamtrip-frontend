@@ -6,6 +6,7 @@ import ProductSessionSkeleton from "./ProductSession.skeleton";
 import axios from "axios";
 import { AppStrings } from "@/strings/app.strings";
 import ProductCardError from "../ProductCard/ProductCard.error";
+import { useSearch } from "@/store/searchStore";
 
 export interface TProductSessionProps {
   travels: ITravelApresentation[];
@@ -24,6 +25,7 @@ const ProductSession = ({
   isError,
   refecth,
 }: TProductSessionProps) => {
+  const { endDate, startDate } = useSearch();
   const navigate = useNavigate();
 
   if (loading) return <ProductSessionSkeleton />;
@@ -48,6 +50,13 @@ const ProductSession = ({
     );
   }
 
+  const urlToTrip = (id: string) =>
+    startDate && endDate
+      ? `${
+          ROUTE.trip
+        }/${id}?startDate=${startDate?.toISOString()}&endDate=${endDate?.toISOString()}`
+      : `${ROUTE.trip}/${id}`;
+
   if (travels.length === 0) return null;
 
   return (
@@ -62,7 +71,7 @@ const ProductSession = ({
           <ProductCard
             key={item._id}
             id={item._id}
-            onClick={() => navigate(`${ROUTE.trip}/${item._id}`)}
+            onClick={() => navigate(urlToTrip(item._id))}
             price={item.price}
             rating={item?.rating || 0}
             title={item.name}

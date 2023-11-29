@@ -3,7 +3,7 @@ import { CalendarIcon, SearchIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { cn } from "@/lib/utils";
+import { cn, normalizeReserveDatesString } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -14,11 +14,10 @@ import {
 } from "@/components/ui/popover";
 
 import { DateRange } from "react-day-picker";
-import format from "date-fns/format";
-import { ptBR } from "date-fns/locale";
 import { Input } from "@/components/ui/input";
 import { AppStrings } from "@/strings/app.strings";
 import { useState } from "react";
+import { useSearchStore } from "@/store/searchStore";
 
 interface TSearchProps {
   onSubmitForm: (search: string, startDate: Date, endDate: Date) => void;
@@ -51,7 +50,14 @@ const FormSchema = z.object({
 });
 
 const Search = ({ onSubmitForm }: TSearchProps) => {
-  const [textDate, setTextDate] = useState<string>(AppStrings.selectDate);
+  const {
+    actions: { setSearchDate },
+    endDate,
+    startDate,
+  } = useSearchStore();
+  const [textDate, setTextDate] = useState<string>(
+    normalizeReserveDatesString(startDate, endDate) || AppStrings.selectDate
+  );
 
   const form = useForm<TFormData>({
     resolver: zodResolver(FormSchema),
@@ -108,26 +114,24 @@ const Search = ({ onSubmitForm }: TSearchProps) => {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="range"
-                        selected={field.value}
+                        selected={
+                          field.value || {
+                            from: startDate,
+                            to: endDate,
+                          }
+                        }
+                        fromDate={new Date()}
                         onSelect={(e) => {
                           const clonedDates = { ...e };
                           field.onChange(clonedDates);
-                          const selectedDate =
-                            e?.from || e?.to
-                              ? `${
-                                  e.from
-                                    ? format(e.from, "eee d 'de' MMM", {
-                                        locale: ptBR,
-                                      })
-                                    : ""
-                                } - ${
-                                  e.to
-                                    ? format(e.to, "eee d 'de' MMM", {
-                                        locale: ptBR,
-                                      })
-                                    : ""
-                                }`
-                              : `${AppStrings.initDate} - ${AppStrings.endDate}`;
+                          setSearchDate({
+                            endDate: clonedDates.to,
+                            startDate: clonedDates.from,
+                          });
+                          const selectedDate = normalizeReserveDatesString(
+                            e?.from,
+                            e?.to
+                          );
                           setTextDate(selectedDate);
                         }}
                       />

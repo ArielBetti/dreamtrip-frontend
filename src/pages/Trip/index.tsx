@@ -3,10 +3,9 @@ import { Card } from "@/components/ui/card";
 import IconComponent from "@/icons";
 import { useGetSingleTravel } from "@/queries/useGetSingleTravel";
 import { MapPinIcon } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import ScrollContainer from "react-indiana-drag-scroll";
 import PhotoViewer from "@/components/compose/PhotoViewer";
-import FooterBooking from "@/components/compose/FooterBooking";
 import ReviewComponent from "@/components/compose/Review";
 import { reviewsComponentMock } from "@/mocks/reviews-component";
 import TripSkeleton from "./Trip.skeleton";
@@ -15,8 +14,13 @@ import TripError from "./Trip.error";
 import { AppStrings } from "@/strings/app.strings";
 import FavoriteToggle from "@/components/compose/FavoriteToggle";
 import { useHeaderActions } from "@/store";
+import ReserveCard from "@/components/compose/ReserveCard";
 
 const Trip = () => {
+  const [queryParams] = useSearchParams();
+  const startDate = queryParams.get("startDate");
+  const endDate = queryParams.get("endDate");
+
   const { id } = useParams();
   const {
     data: travel,
@@ -96,144 +100,41 @@ const Trip = () => {
             </div>
           </div>
         </div>
+        <ReserveCard
+          aditionalPerPerson={travel?.additionalPerPerson || 0}
+          maxCapacity={travel?.capacityPeople || 0}
+          price={travel?.price || 0}
+          reserveDate={{
+            from: startDate ? new Date(startDate) : new Date(),
+            to: endDate ? new Date(endDate) : new Date(),
+          }}
+          travelId={travel?._id || ""}
+          travelers={1}
+        />
         <h2 className="font-bold">Galeria de fotos</h2>
         <PhotoViewer images={travel?.gallery || []} />
       </div>
       <Card className="animate-downSlide flex flex-col items-start justify-start gap-4 h-full min-h-[770px] md:max-h-[770px] max-w-full rounded-xl p-2">
-        <h2 className="font-bold">O que está incluso?</h2>
-        <ScrollContainer
-          vertical
-          className="scroll-container flex gap-2 max-w-[300px]"
-        >
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>{" "}
-          <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
-            <IconComponent name="plane" className="w-5 h-5 text-primary" />
-            <p className="font-semibold">tesxte</p>
-          </Card>
-        </ScrollContainer>
+        {travel?.included && travel?.included.length > 0 && (
+          <>
+            <h2 className="font-bold">O que está incluso?</h2>
+            <ScrollContainer
+              vertical
+              className="scroll-container flex gap-2 max-w-[300px]"
+            >
+              {travel?.included?.map((item) => (
+                <Card className="p-2 flex items-center justify-start gap-2 text-sm rounded-xl">
+                  <IconComponent
+                    name={item.icon}
+                    className="w-5 h-5 text-primary"
+                  />
+                  <p className="font-semibold">{item.label}</p>
+                </Card>
+              ))}
+            </ScrollContainer>
+          </>
+        )}
+
         <h2 className="font-bold">Sobre a viagem</h2>
         <p>{travel?.description}</p>
         <div className="flex items-center justify-start w-full gap-5">
@@ -252,7 +153,6 @@ const Trip = () => {
           ))}
         </ScrollContainer>
       </Card>
-      <FooterBooking onClick={() => {}} price={travel?.price || 0} />
     </div>
   );
 };

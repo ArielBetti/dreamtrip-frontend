@@ -13,6 +13,7 @@ import BackdropLoader from "@/components/compose/BackdropLoading";
 
 const CreateUser = () => {
   const { setToken, setUser } = useAuthActions();
+  const [complete, setComplete] = useState(false);
   const [newUser, setNewUser] = useState<ICreateUserReturnDTO | null>(null);
   const { setHeader } = useHeaderActions();
   const [welcomeDialog, setWelcomeDialog] = useState(false);
@@ -47,6 +48,7 @@ const CreateUser = () => {
           setUser(result);
           setWelcomeDialog(true);
           setNewUser(result);
+          setComplete(true);
         },
       }
     );
@@ -69,6 +71,7 @@ const CreateUser = () => {
       <BackdropLoader open={isLoadingCreateUser} />
       <div className="w-full max-w-md">
         <CreateUserMultiStepForm
+          complete={complete}
           onSubmit={(data: ICreateUserRequestFormDTO) => onSubmit(data)}
         />
         <CustomAlertDialog

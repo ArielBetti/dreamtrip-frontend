@@ -56,6 +56,8 @@ export interface ITravelDestination {
   gallery: string[];
   vacanciesPerPeriod: number;
   vacationPackageId?: string;
+  capacityPeople: number;
+  additionalPerPerson: number;
 }
 
 export type ITravelApresentation = ITravelDestination & {

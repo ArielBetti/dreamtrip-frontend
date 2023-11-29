@@ -1,6 +1,7 @@
 import {
   Bell,
   CreditCard,
+  HelpCircleIcon,
   LogIn,
   LogOut,
   User,
@@ -44,7 +45,9 @@ const UserDropdown = ({ user }: IUserDropdownProps) => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Área do usuário</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          {user?.nickName || "Área do usuário"}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {user && (
           <>
@@ -69,7 +72,10 @@ const UserDropdown = ({ user }: IUserDropdownProps) => {
         <DropdownMenuGroup>
           {!user && (
             <>
-              <DropdownMenuItem className="relative">
+              <DropdownMenuItem
+                onClick={() => navigate(ROUTE.login)}
+                className="relative"
+              >
                 <LogIn className="mr-2 h-4 w-4" />
                 <span>Entrar</span>
               </DropdownMenuItem>
@@ -82,9 +88,19 @@ const UserDropdown = ({ user }: IUserDropdownProps) => {
               </DropdownMenuItem>
             </>
           )}
+          <DropdownMenuItem
+            onClick={() => navigate(ROUTE.faq)}
+            className="relative"
+          >
+            <HelpCircleIcon className="mr-2 h-4 w-4" />
+            <span>FAQ</span>
+          </DropdownMenuItem>
           <ThemeToggleItem />
           {user && (
-            <DropdownMenuItem className="relative">
+            <DropdownMenuItem
+              onClick={() => navigate(ROUTE.logout)}
+              className="relative"
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Desconectar</span>
             </DropdownMenuItem>

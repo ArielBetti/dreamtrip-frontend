@@ -3,4 +3,5 @@ export const ENDPOINTS = {
   findTravel: "/travel",
   popularTravels: "/travel/popular",
   createUser: "/user/create",
+  loginUser: "/user/login",
 };
